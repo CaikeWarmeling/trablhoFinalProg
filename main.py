@@ -1,76 +1,112 @@
-from tkinter import *
-from tkinter import ttk
+import sqlite3 as lite
 
-#----------------------------------------Site----------------------------------------#
+conexao = lite.connect('veiculos.db')
 
-janela = Tk()
-janela.title("")
-janela.geometry('1280x720')
-janela.configure(background="#e9edf5")
-janela.resizable(width=False, height=False)
+#----------------------------------------Carros----------------------------------------#
 
-#----------------------------------------Frame de cima----------------------------------------#
+#CRIAR carros
+def incertInfoCarros(i):
+    #lista = ['mitsubishi','l200 triton','2009','80000','azul','mon2025','9BD111060T5002156','9BD111060T5002156','190000','diesel','3200','165cv','manual','em espera','4','2','hidraulica','4x4','1000']
+    with conexao:
+        cur = conexao.cursor()
+        query = f'''INSERT INTO carros (marca, modelo, anoFabricacao, preco, cor,
+                                        placa, chassis, numeroMotor, kilometragem, tipoCombustivel,
+                                        cilindradas, potencia, tipoTransmicao, status, dataVenda,
+                                        numeroPortas, airbags, tipoDirecao, tracao, espacoPortaMalas) 
+                                    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, Null, ?, ?, ?, ?, ?)'''
+        cur.execute(query, i)
 
-frameCima = Frame(janela, width=310, height=50, bg="#ff3300", relief='flat')
-frameCima.grid(row=0, column=0)
 
-appNome = Label(frameCima, text="Revenda de Veículos", anchor=NW, font=('Ivy 18 bold'), bg="#ff3300", fg="#333333", relief='flat')
-appNome.place(x=10, y=15)
+#VISUALIZAR carros
+def viewInfoCarros(id):
+    view = []
+    with conexao:
+        cur = conexao.cursor()
+        querry = "SELECT * FROM carros WHERE id=?"
+        cur.execute(querry, id)
+        informacoes = cur.fetchall()
+        for i in informacoes:
+            view.append(i)
+    return view
 
-#----------------------------------------Frame de Baixo----------------------------------------#
+#PRE VISUALIZAR carros
+def preViewInfoCarros():
+    preView = []
+    with conexao:
+        cur = conexao.cursor()
+        querry = "SELECT id, marca, modelo, anoFabricacao, cor, placa, preco FROM carros"
+        cur.execute(querry)
+        preVisualizar = cur.fetchall()
+        for i in preVisualizar:
+            preView.append(i)
+    return preView
 
-frameBaixo = Frame(janela, width=310, height=670, bg="#ffffff", relief="flat")
-frameBaixo.grid(row=1, column=0, sticky=NSEW, padx=0, pady=1)
+#EDITAR carros
+def editInfoCarros():
+    lista = ["26000", "187000", "em espera", None, 1]
+    with conexao:
+        cur = conexao.cursor()
+        querry = "UPDATE carros SET preco=?, kilometragem=?, status=?, dataVenda=? WHERE id=?"
+        cur.execute(querry, lista)
 
-escolherVisualizar = Label(frameBaixo, text="Visualizar tabela:", anchor=NW, font=('Ivy 16 bold'), bg="#ffffff", fg="#333333", relief='flat')
-escolherVisualizar.place(x=10, y=25)
+#DELETAR carros
+def deleteInfoCarros(id):
+    with conexao:
+        cur = conexao.cursor()
+        querry = "DELETE FROM carros WHERE id=?"
+        cur.execute(querry, id)
 
-botaoCarro = Button(frameBaixo, text='Carros', width=10, anchor=NW, font=('ivy 14 bold'), bg="#aaaaaa", fg="#333333", relief='raised', overrelief='ridge')
-botaoCarro.place(x=15, y=60)
+#----------------------------------------Motos----------------------------------------#
 
-botaomoto = Button(frameBaixo, text='motos', width=10, anchor=NW, font=('ivy 14 bold'), bg="#aaaaaa", fg="#333333", relief='raised', overrelief='ridge')
-botaomoto.place(x=160, y=60)
+#CRIAR motos
+#def incertInfoMotos(i):
+i = ['honda', 'cg 125 today', '1992', '5000', 'vermelha', 'mas2025', '9BD111060T5002156', '9BD111060T5002156', '27000', 'gasolina', '125', '11,5 cv', 'manual', 'em espera', 'triciclo', '300kg', 'tambor', 'kit trilha']
+if i != 0:
+    with conexao:
+        cur = conexao.cursor()
+        query = f'''INSERT INTO motos (marca, modelo, anoFabricacao, preco, cor,
+                                        placa, chassis, numeroMotor, kilometragem, tipoCombustivel,
+                                        cilindradas, potencia, tipoTransmicao, status, dataVenda,
+                                        tipoMoto, peso, tipoFreio, acessoriosEspeciais) 
+                                    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, Null, ?, ?, ?, ?)'''
+        cur.execute(query, i)
 
-botaoInserir = Button(frameBaixo, text='Incerir', width=10, anchor=NW, font=('ivy 12 bold'), bg="#aaaaaa", fg="#333333", relief='raised', overrelief='ridge')
-botaoInserir.place(x=15, y=500)
+#VISUALIZAR motos
+def viewInfoMotos(id):
+    view = []
+    with conexao:
+        cur = conexao.cursor()
+        querry = "SELECT * FROM motos WHERE id=?"
+        cur.execute(querry, id)
+        informacoes = cur.fetchall()
+        for i in informacoes:
+            view.append(i)
+    return view
 
-botaoEditar = Button(frameBaixo, text='Editar', width=10, anchor=NW, font=('ivy 12 bold'), bg="#aaaaaa", fg="#333333", relief='raised', overrelief='ridge')
-botaoEditar.place(x=15, y=540)
+#PRE VISUALIZAR motos
+def preViewInfoMotos():
+    preView = []
+    with conexao:
+        cur = conexao.cursor()
+        querry = "SELECT id, marca, modelo, anoFabricacao, cor, placa, preco FROM motos"
+        cur.execute(querry)
+        preVisualizar = cur.fetchall()
+        for i in preVisualizar:
+            preView.append(i)
+    return preView
 
-botaoExcluir = Button(frameBaixo, text='Excluir', width=10, anchor=NW, font=('ivy 12 bold'), bg="#aaaaaa", fg="#333333", relief='raised', overrelief='ridge')
-botaoExcluir.place(x=15, y=580)
+#EDITAR motos
+def editInfoMotos():
+    lista = ["26000", "187000", "em espera", None, 1]
+    with conexao:
+        cur = conexao.cursor()
+        querry = "UPDATE motos SET preco=?, kilometragem=?, status=?, dataVenda=? WHERE id=?"
+        cur.execute(querry, lista)
 
-#----------------------------------------Frame da direita----------------------------------------#
-
-frameDireita = Frame(janela, width=970, height=720, bg="#e9edf5", relief="flat")
-frameDireita.grid(row=0, column=1, rowspan=2, padx=1, pady=0, sticky=NSEW)
-
-tabelaHead = ['Marca','modelo','ano de fabricação','cor','placa', 'view']
-
-tree = ttk.Treeview(frameDireita, selectmode='extended', columns=tabelaHead, show='headings')
-
-barraScroll = ttk.Scrollbar(frameDireita, orient='vertical', command=tree.yview)
-tree.configure(yscrollcommand=barraScroll.set)
-
-tree.grid(column=0, row=0, sticky='nsew')
-barraScroll.grid(column=1, row=0, sticky='ns')
-frameDireita.grid_rowconfigure(0, weight=12)
-
-lista = ["nw", "nw", "nw", "nw", "center", "center"]
-altura = [150, 300, 150, 120, 150, 100]
-n = 0
-
-for col in tabelaHead:
-    tree.heading(col, text=col.title(), anchor=CENTER)
-    tree.column(col, width=altura[n], anchor=lista[n])
-    n+=1
-
-tabelaNomes = [["fiat", "Strada fire 1.4 CS", "2005/2005", "preta", "mph4400"],
-               ["mitsubishi", "l200 triton HPE", "2009/2009", "azul", "mon6751"],
-               ["mitsubishi", "lancer HLE", "2016/2016", "prata", "sla1234"]
-               ]
-
-for item in tabelaNomes:
-    tree.insert('', 'end', values=item)
-
-janela.mainloop()
+#DELETAR motos
+def deleteInfoMotos(id):
+    id = [1]
+    with conexao:
+        cur = conexao.cursor()
+        querry = "DELETE FROM motos WHERE id=?"
+        cur.execute(querry, id)

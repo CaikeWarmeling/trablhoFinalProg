@@ -1,8 +1,5 @@
 import sqlite3 as lite
 
-
-variavel = None
-
 con = lite.connect('veiculos.db')
 
 with con:
@@ -21,7 +18,7 @@ with con:
         kilometragem INT NOT NULL,
         tipoCombustivel VARCHAR(45),
         cilindradas INT,
-        potencia DECIMAL(10,2),
+        potencia VARCHAR(10),
         tipoTransmicao VARCHAR(45),
         status VARCHAR(45) NOT NULL,
         dataVenda DATE,
@@ -46,7 +43,7 @@ with con:
         kilometragem INT NOT NULL,
         tipoCombustivel VARCHAR(45),
         cilindradas INT,
-        potencia DECIMAL(10,2),
+        potencia VARCHAR(10),
         tipoTransmicao VARCHAR(45),
         status VARCHAR(45) NOT NULL,
         dataVenda DATE,
@@ -56,29 +53,3 @@ with con:
         acessoriosEspeciais VARCHAR(100)
     )
     ''')
-
-
-
-'''
-CREATE
-comando = f'INSERT INTO carros () VALUES({}, {})'
-cursor.execute(comando)
-conexao.commit()
-
-READ
-comando = 'SELECT * FROM carros'
-resustado = cursor.fetchall()
-print(resultado)
-
-UPDATE
-comando = f'UPDATE carros SET tanana WHERE placa = {placa}'
-cursor.execute(comando)
-conexao.commit()
-
-DELETE
-comando = f'DELETE FROM carros WHERE placa = {placa}'
-cursor.execute(comando)
-conexao.commit()
-
-cursor.close()
-conexao.close()'''
