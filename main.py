@@ -6,7 +6,8 @@ conexao = lite.connect('veiculos.db')
 
 #CRIAR carros
 def incertInfoCarros(i):
-    #lista = ['mitsubishi','l200 triton','2009','80000','azul','mon2025','9BD111060T5002156','9BD111060T5002156','190000','diesel','3200','165cv','manual','em espera','4','2','hidraulica','4x4','1000']
+#i = ['mitsubishi','l200 triton','2009','80000','azul','mon2025','9BD111060T5002156','9BD111060T5002156','190000','diesel','3200','165cv','manual','em espera','4','2','hidraulica','4x4','1000']
+#if i != 0:
     with conexao:
         cur = conexao.cursor()
         query = f'''INSERT INTO carros (marca, modelo, anoFabricacao, preco, cor,
@@ -59,9 +60,9 @@ def deleteInfoCarros(id):
 #----------------------------------------Motos----------------------------------------#
 
 #CRIAR motos
-#def incertInfoMotos(i):
-i = ['honda', 'cg 125 today', '1992', '5000', 'vermelha', 'mas2025', '9BD111060T5002156', '9BD111060T5002156', '27000', 'gasolina', '125', '11,5 cv', 'manual', 'em espera', 'triciclo', '300kg', 'tambor', 'kit trilha']
-if i != 0:
+def incertInfoMotos(i):
+#i = ['honda', 'cg 125 today', '1992', '5000', 'vermelha', 'mas2025', '9BD111060T5002156', '9BD111060T5002156', '27000', 'gasolina', '125', '11,5 cv', 'manual', 'em espera', 'triciclo', '300kg', 'tambor', 'kit trilha']
+#if i != 0:
     with conexao:
         cur = conexao.cursor()
         query = f'''INSERT INTO motos (marca, modelo, anoFabricacao, preco, cor,
@@ -105,7 +106,6 @@ def editInfoMotos():
 
 #DELETAR motos
 def deleteInfoMotos(id):
-    id = [1]
     with conexao:
         cur = conexao.cursor()
         querry = "DELETE FROM motos WHERE id=?"
