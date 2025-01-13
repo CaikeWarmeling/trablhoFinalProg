@@ -17,6 +17,30 @@ class Veiculo:
         self.tipoTransmicao=tipoTransmicao
         self.status=status
     
+    @property
+    def placa(self):
+        return self.__placa
+    
+    @placa.setter
+    def placa(self, novo_placa):
+        self.__placa = novo_placa
+
+    @property
+    def numeroChassis(self):
+        return self.__numeroChassis
+    
+    @numeroChassis.setter
+    def numeroChassis(self, novo_numeroChassis):
+        self.__numeroChassis = novo_numeroChassis
+
+    @property
+    def numeroMotor(self):
+        return self.__numeroMotor
+    
+    @numeroMotor.setter
+    def numeroMotor(self, novo_numeroMotor):
+        self.__numeroMotor = novo_numeroMotor
+
 class Carro(Veiculo):
     def __init__(self, marca, modelo, anoDeFabricacao, preco, cor, placa, numeroChassis, numeroMotor, kilometragem, tipoCombustivel, cilindradas, potencia, tipoTransmicao, status, numeroPortas, airbags, tipoDirecao, tracao, espacoPortaMalas):
         super().__init__(marca, modelo, anoDeFabricacao, preco, cor, placa, numeroChassis, numeroMotor, kilometragem, tipoCombustivel, cilindradas, potencia, tipoTransmicao, status)

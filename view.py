@@ -7,8 +7,9 @@ from main import *
 #----------------------------------------Funçôes----------------------------------------#
 
 def changeValueVisualizar(tipo):
+
     global visualizar
-    if tipo in ["motos", "carros"]:
+    if tipo in ["motos", "carros", "filtroCarros", "filtroMotos"]:
         visualizar = tipo
         for widget in frameDireita.winfo_children():
             widget.destroy()
@@ -16,10 +17,11 @@ def changeValueVisualizar(tipo):
         viewPreInformations()
 
     else:
-        print("Valor inválido! Use 'motos' ou 'carros'.")
+        print("Erro! valor visualizar informado errado na função changeValueVisualizar.")
 
 def renderinput(frame, text, x, y):
-    label = Label(frame, text=text, anchor=NW, font=('Ivy, 10 bold'), bg="#333333", fg="#ffffff", relief='flat')
+
+    label = Label(frame, text=text, anchor=NW, font=('Ivy, 12 bold'), bg="#e9edf5", fg="#333333", relief='flat')
     label.place(x = x, y= y)
     entry = Entry(frame, width=45, justify='left', relief='solid')
     entry.place(x = x, y = y+30)
@@ -39,7 +41,7 @@ def view():
     janelaVisualizar.configure(background="#e9edf5")
     janelaVisualizar.resizable(width=False, height=False)
 
-    if visualizar == "carros":
+    if visualizar == "carros" or visualizar == "filtroCarros":
         tabelaHeadCima = ['id','Marca','modelo','ano de fabricação','preço','cor', 'placa', 'número do chassis','número do motor','kilometragem','tipo de combustivel','cilindradas','potência','tipo de transmicao','status','data da venda','numero de portas','airbags','tipo de direcao','tração','espaco no porta malas']
 
         cabecalioCima = ttk.Treeview(janelaVisualizar, selectmode='extended', columns=tabelaHeadCima, show='headings')
@@ -58,7 +60,7 @@ def view():
         for item in View:
             cabecalioCima.insert('', 'end', values=item)
 
-    elif visualizar == "motos":
+    elif visualizar == "motos" or visualizar == "filtroMotos":
         tabelaHeadCima = ['id','Marca','modelo','ano de fabricação','preço','cor', 'placa', 'número do chassis','número do motor','kilometragem','tipo de combustivel','cilindradas','potência','tipo de transmicao','status','data da venda','tipo da moto', 'peso', 'tipo de freio', 'acessorios especiais']
 
         cabecalioCima = ttk.Treeview(janelaVisualizar, selectmode='extended', columns=tabelaHeadCima, show='headings')
@@ -77,13 +79,13 @@ def view():
         for item in View:
             cabecalioCima.insert('', 'end', values=item)
     else:
-        print("Erro!")
+        print("Erro! valor visualizar nao definido na função view.")
 
 def insert():
 
     janelaInserir = Tk()
     janelaInserir.title("Inserir veiculo")
-    janelaInserir.geometry('640x720')
+    janelaInserir.geometry('640x640')
     janelaInserir.configure(background="#e9edf5")
     janelaInserir.resizable(width=False, height=False)
 
@@ -92,7 +94,7 @@ def insert():
     ano = renderinput(janelaInserir,"ano de fabircação do veiculo:", 10, 70)
     preco = renderinput(janelaInserir,"preço do veiculo:", 350, 70)
     cor = renderinput(janelaInserir,"cor do veiculo:", 10, 130)
-    placa = renderinput(janelaInserir,"placa do veiculo", 350, 130)
+    placa = renderinput(janelaInserir,"placa do veiculo:", 350, 130)
     chassis = renderinput(janelaInserir,"número do chassis do veiculo:", 10, 190)
     numMotor = renderinput(janelaInserir,"número do motor do veiculo:", 350, 190)
     kilometragem = renderinput(janelaInserir,"kilometragem do veiculo:", 10, 250)
@@ -115,33 +117,42 @@ def insert():
     elif visualizar == "motos":
         tipoMoto = renderinput(janelaInserir,"tipo de moto:", 10, 430)
         peso = renderinput(janelaInserir,"peso da moto:", 350, 430)
-        tipoFreio = renderinput(janelaInserir,"tipo de freio da mato:", 10, 490)
+        tipoFreio = renderinput(janelaInserir,"tipo de freio da moto:", 10, 490)
         acessoriosEspeciais = renderinput(janelaInserir,"acessorios especiais:", 350, 490)
 
         botaoInserir = Button(janelaInserir, command=lambda:insertInClassMotoAndPutInDB(marca.get(),modelo.get(),ano.get(),preco.get(),cor.get(),placa.get(),chassis.get(),numMotor.get(),kilometragem.get(),tipoCombustivel.get(),cilindradas.get(),potencia.get(),transmissao.get(),status.get(),tipoMoto.get(),peso.get(),tipoFreio.get(),acessoriosEspeciais.get()), text='Incerir', width=10, anchor=NW, font=('ivy 12 bold'), bg="#aaaaaa", fg="#333333", relief='raised', overrelief='ridge')
         botaoInserir.place(x=350, y=565)
+    
+    else:
+        print("Erro! valor visualizar informado errado na função insert.")
 
     def insertInClassCarroAndPutInDB(marca,modelo,anoFabricacao,preco,cor,placa,chassis,numeroMotor,kilometragem,tipoCombustivel,cilindradas,potencia,tipoTransmicao,status,numeroPortas,airbags,tipoDirecao,tracao,espacoPortaMalas):
 
-        carro = Carro(marca,modelo,anoFabricacao,preco,cor,placa,chassis,numeroMotor,kilometragem,tipoCombustivel,cilindradas,potencia,tipoTransmicao,status,numeroPortas,airbags,tipoDirecao,tracao,espacoPortaMalas)
-        carro.insertCarro()
-        messagebox.showinfo('Sucesso','Os dados foram adicionados com sucesso!')
-        for widget in frameDireita.winfo_children():
-            widget.destroy()
+        if marca and modelo and ano and preco and placa != "" :
+            carro = Carro(marca,modelo,anoFabricacao,preco,cor,placa,chassis,numeroMotor,kilometragem,tipoCombustivel,cilindradas,potencia,tipoTransmicao,status,numeroPortas,airbags,tipoDirecao,tracao,espacoPortaMalas)
+            carro.insertCarro()
+            messagebox.showinfo('Sucesso','Os dados foram adicionados com sucesso!')
+            for widget in frameDireita.winfo_children():
+                widget.destroy()
 
-        viewPreInformations()
-        janelaInserir.destroy()
+            viewPreInformations()
+            janelaInserir.destroy()
+        else:
+            messagebox.showerror('Erro','Os dados marca, modelo, ano, preço e placa tem que ser preenchidos:')
 
     def insertInClassMotoAndPutInDB(marca,modelo,anoFabricacao,preco,cor,placa,chassis,numeroMotor,kilometragem,tipoCombustivel,cilindradas,potencia,tipoTransmicao,status,tipoMoto,peso,tipoFreio,acessoriosEspeciais):
 
-        moto = Moto(marca,modelo,anoFabricacao,preco,cor,placa,chassis,numeroMotor,kilometragem,tipoCombustivel,cilindradas,potencia,tipoTransmicao,status,tipoMoto,peso,tipoFreio,acessoriosEspeciais)
-        moto.insertMoto()
-        messagebox.showinfo('Sucesso','Os dados foram adicionados com sucesso!')
-        for widget in frameDireita.winfo_children():
-            widget.destroy()
+        if marca and modelo and ano and preco and placa != "" :
+            moto = Moto(marca,modelo,anoFabricacao,preco,cor,placa,chassis,numeroMotor,kilometragem,tipoCombustivel,cilindradas,potencia,tipoTransmicao,status,tipoMoto,peso,tipoFreio,acessoriosEspeciais)
+            moto.insertMoto()
+            messagebox.showinfo('Sucesso','Os dados foram adicionados com sucesso!')
+            for widget in frameDireita.winfo_children():
+                widget.destroy()
 
-        viewPreInformations()
-        janelaInserir.destroy()
+            viewPreInformations()
+            janelaInserir.destroy()
+        else:
+            messagebox.showerror('Erro','Os dados marca, modelo, ano, preço e placa tem que ser preenchidos:')
 
     janelaInserir.mainloop()
 
@@ -158,36 +169,40 @@ def update():
     janelaEditar.configure(background="#e9edf5")
     janelaEditar.resizable(width=False, height=False)
 
-    preco = renderinput(janelaEditar,"Preço",10,10)
-    kilometragem = renderinput(janelaEditar,"kilometragem",350,10)
-    status = renderinput(janelaEditar,"status",10,70)
-    dataVenda = renderinput(janelaEditar,"data da venda",350,70)
+    preco = renderinput(janelaEditar,"Preço:",10,10)
+    kilometragem = renderinput(janelaEditar,"kilometragem:",350,10)
+    status = renderinput(janelaEditar,"status:",10,70)
+    dataVenda = renderinput(janelaEditar,"data da venda:",350,70)
 
     def insertValuesInEditar(preco, kilometragem,status,dataVenda, valorId):
-        lista = []
-        lista.append(preco)
-        lista.append(kilometragem)
-        lista.append(status)
-        lista.append(dataVenda)
-        lista.append(valorId)
 
-        if visualizar == "carros":
-            editCarro(lista)
-            for widget in frameDireita.winfo_children():
-                widget.destroy()
+        if preco != "":
+            lista = []
+            lista.append(preco)
+            lista.append(kilometragem)
+            lista.append(status)
+            lista.append(dataVenda)
+            lista.append(valorId)
 
-            viewPreInformations()
-            messagebox.showinfo('Sucesso','Os dados foram editados com sucesso')
-            janelaEditar.destroy()
+            if visualizar == "carros" or visualizar == "filtroCarros":
+                editCarro(lista)
+                for widget in frameDireita.winfo_children():
+                    widget.destroy()
 
-        elif visualizar == "motos":
-            editMoto(lista)
-            for widget in frameDireita.winfo_children():
-                widget.destroy()
+                viewPreInformations()
+                messagebox.showinfo('Sucesso','Os dados foram editados com sucesso')
+                janelaEditar.destroy()
 
-            viewPreInformations()
-            messagebox.showinfo('Sucesso','Os dados foram editados com sucesso')
-            janelaEditar.destroy()
+            elif visualizar == "motos" or visualizar == "filtroMotos":
+                editMoto(lista)
+                for widget in frameDireita.winfo_children():
+                    widget.destroy()
+
+                viewPreInformations()
+                messagebox.showinfo('Sucesso','Os dados foram editados com sucesso')
+                janelaEditar.destroy()
+        else:
+            messagebox.showerror('Erro','O dado preço precisa ser preenchidos!')
 
     botaoEditar = Button(janelaEditar, command=lambda:insertValuesInEditar(preco.get(),kilometragem.get(),status.get(),dataVenda.get(),valorId), text='Editar', width=10, anchor=NW, font=('ivy 12 bold'), bg="#aaaaaa", fg="#333333", relief='raised', overrelief='ridge')
     botaoEditar.place(x=260, y=150)
@@ -195,27 +210,27 @@ def update():
     janelaEditar.mainloop
 
 def delete():
-    try:
-        treevDados = tree.focus()
-        treevDicionario = tree.item(treevDados)
-        treeLista = treevDicionario['values']
-        valorId = [treeLista[0]]
 
-        if visualizar == "carros":
-            deleteCarro(valorId)
-            messagebox.showinfo('Sucesso','Os dados foram deletados com sucesso')
+    treevDados = tree.focus()
+    treevDicionario = tree.item(treevDados)
+    treeLista = treevDicionario['values']
+    valorId = [treeLista[0]]
 
-        elif visualizar == "motos":
-            deleteMoto(valorId)
-            messagebox.showinfo('Sucesso','Os dados foram deletados com sucesso')
+    if visualizar == "carros" or visualizar == "filtroCarros":
+        deleteCarro(valorId)
+        messagebox.showinfo('Sucesso','Os dados foram deletados com sucesso')
 
-        for widget in frameDireita.winfo_children():
-            widget.destroy()
+    elif visualizar == "motos" or visualizar == "filtroMotos":
+        deleteMoto(valorId)
+        messagebox.showinfo('Sucesso','Os dados foram deletados com sucesso')
+    
+    else:
+        print("Erro! valor visualizar informado errado na função delete.")
 
-        viewPreInformations()
+    for widget in frameDireita.winfo_children():
+        widget.destroy()
 
-    except IndentationError:
-        messagebox.showerror('Erro','Selecione um dos dados na tabela')
+    viewPreInformations()
 
 #----------------------------------------Site----------------------------------------#
 
@@ -227,19 +242,26 @@ janela.resizable(width=False, height=False)
 
 #----------------------------------------Frame de cima----------------------------------------#
 
-frameCima = Frame(janela, width=310, height=50, bg="#ff3300", relief='flat')
+frameCima = Frame(janela, width=310, height=50, bg="#330066", relief='flat')
 frameCima.grid(row=0, column=0)
 
-appNome = Label(frameCima, text="Revenda de Veículos", anchor=NW, font=('Ivy 18 bold'), bg="#ff3300", fg="#333333", relief='flat')
+appNome = Label(frameCima, text="Revenda de Veículos", anchor=NW, font=('Ivy 18 bold'), bg="#330066", fg="#e9edf5", relief='flat')
 appNome.place(x=10, y=15)
 
 #----------------------------------------Frame de Baixo----------------------------------------#
 
-frameBaixo = Frame(janela, width=310, height=670, bg="#ffffff", relief="flat")
+frameBaixo = Frame(janela, width=310, height=670, bg="#e9edf5", relief="flat")
 frameBaixo.grid(row=1, column=0, sticky=NSEW, padx=0, pady=1)
 
-escolherVisualizar = Label(frameBaixo, text="Visualizar tabela:", anchor=NW, font=('Ivy 16 bold'), bg="#ffffff", fg="#333333", relief='flat')
+escolherVisualizar = Label(frameBaixo, text="Visualizar tabela:", anchor=NW, font=('Ivy 16 bold'), bg="#e9edf5", fg="#333333", relief='flat')
 escolherVisualizar.place(x=10, y=25)
+
+filtro = Label(frameBaixo, text="filtro:", anchor=NW, font=('Ivy 14 bold'), bg="#e9edf5", fg="#333333", relief='flat')
+filtro.place(x=10, y=110)
+marca = renderinput(frameBaixo, "marca do veiculo:", 15, 140)
+modelo = renderinput(frameBaixo, "modelo do veiculo:", 15, 200)
+ano = renderinput(frameBaixo, "ano do veiculo:", 15, 260)
+placa = renderinput(frameBaixo, "placa do veiculo:", 15, 320)
 
 #----------------------------------------Botões----------------------------------------#
 
@@ -248,8 +270,8 @@ visualizar = "carros"
 botaoCarro = Button(frameBaixo, command=lambda:changeValueVisualizar("carros"), text='Carros', width=10, anchor=NW, font=('ivy 14 bold'), bg="#aaaaaa", fg="#333333", relief='raised', overrelief='ridge')
 botaoCarro.place(x=15, y=60)
 
-botaomoto = Button(frameBaixo, text='motos', command=lambda:changeValueVisualizar("motos"), width=10, anchor=NW, font=('ivy 14 bold'), bg="#aaaaaa", fg="#333333", relief='raised', overrelief='ridge')
-botaomoto.place(x=160, y=60)
+botaoMoto = Button(frameBaixo, command=lambda:changeValueVisualizar("motos"), text='Motos', width=10, anchor=NW, font=('ivy 14 bold'), bg="#aaaaaa", fg="#333333", relief='raised', overrelief='ridge')
+botaoMoto.place(x=160, y=60)
 
 botaoVisualizar = Button(frameBaixo, command=view, text='Visualizar', width=10, anchor=NW, font=('ivy 12 bold'), bg="#aaaaaa", fg="#333333", relief='raised', overrelief='ridge')
 botaoVisualizar.place(x=15, y=460)
@@ -260,7 +282,7 @@ botaoInserir.place(x=15, y=500)
 botaoEditar = Button(frameBaixo, command=update, text='Editar', width=10, anchor=NW, font=('ivy 12 bold'), bg="#aaaaaa", fg="#333333", relief='raised', overrelief='ridge')
 botaoEditar.place(x=15, y=540)
 
-botaoExcluir = Button(frameBaixo, text='Excluir', command=delete, width=10, anchor=NW, font=('ivy 12 bold'), bg="#aaaaaa", fg="#333333", relief='raised', overrelief='ridge')
+botaoExcluir = Button(frameBaixo,  command=delete, text='Excluir', width=10, anchor=NW, font=('ivy 12 bold'), bg="#aaaaaa", fg="#333333", relief='raised', overrelief='ridge')
 botaoExcluir.place(x=15, y=580)
 
 #----------------------------------------Frame da direita----------------------------------------#
@@ -272,7 +294,15 @@ def viewPreInformations():
 
     global tree
 
-    tabelaHead = ['id','Marca','modelo','ano de fabricação','cor','placa', 'preço']
+    if visualizar == "carros":
+        botaoFiltroCarro = Button(frameBaixo, command=lambda:changeValueVisualizar("filtroCarros"), text='Filtrar', width=10, anchor=NW, font=('ivy 14 bold'), bg="#aaaaaa", fg="#333333", relief='raised', overrelief='ridge')
+        botaoFiltroCarro.place(x=15, y=380)
+
+    elif visualizar == "motos":
+        botaoFiltroMoto = Button(frameBaixo, command=lambda:changeValueVisualizar("filtroMotos"), text='Filtrar', width=10, anchor=NW, font=('ivy 14 bold'), bg="#aaaaaa", fg="#333333", relief='raised', overrelief='ridge')
+        botaoFiltroMoto.place(x=15, y=380)
+
+    tabelaHead = ['id','Marca','modelo','ano de fabricação','cor','placa', 'km', 'status', 'preço R$']
 
     tree = ttk.Treeview(frameDireita, selectmode='extended', columns=tabelaHead, show='headings')
 
@@ -283,8 +313,8 @@ def viewPreInformations():
     barraScroll.grid(column=1, row=0, sticky='ns')
     frameDireita.grid_rowconfigure(0, weight=12)
 
-    posicaoHead = ["nw","nw", "nw", "nw", "nw", "center", "center"]
-    altura = [40, 150, 250, 150, 100, 150, 130]
+    posicaoHead = ['nw','nw', 'nw', 'center', 'nw', 'center', 'nw', 'center', 'center']
+    altura = [40, 125, 180, 110, 100, 125, 70, 90, 130]
 
     n = 0
     for col in tabelaHead:
@@ -292,11 +322,26 @@ def viewPreInformations():
         tree.column(col, width=altura[n], anchor=posicaoHead[n])
         n+=1
 
-    if visualizar == "carros":
+    if visualizar == "filtroCarros":
+        preView = filterCarros(marca.get(), modelo.get(), ano.get(), placa.get())
+        if preView == []:
+            messagebox.showwarning('Erro', 'Nenhum resultado encontrado!')
+            changeValueVisualizar("carros")
+
+    elif visualizar == "filtroMotos":
+        preView = filterMotos(marca.get(), modelo.get(), ano.get(), placa.get())
+        if preView == []:
+            messagebox.showwarning('Erro', 'Nenhum resultado encontrado!')
+            changeValueVisualizar("motos")
+
+    elif visualizar == "carros":
         preView = preViewCarros()
 
     elif visualizar == "motos":
         preView = preViewMotos()
+
+    else:
+        print("Erro! valor visualizar informado errado na função viewPreInformations.")
 
     for item in preView:
         tree.insert('', 'end', values=item)

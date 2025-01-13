@@ -4,7 +4,21 @@ conexao = lite.connect('veiculos.db')
 
 #----------------------------------------Carros----------------------------------------#
 
-#VISUALIZAR carros
+#FILTRAR carros
+def filterCarros(marca, modelo, ano, placa):
+    listFilter = []
+    with conexao:
+        cur = conexao.cursor()
+        querry = '''SELECT id, marca, modelo, anoFabricacao, cor, placa, kilometragem, status, preco 
+                    FROM carros 
+                    WHERE (? is NULL or marca=? or modelo=? or anoFabricacao=? or placa=?)'''
+        cur.execute(querry, [marca, marca, modelo, ano, placa])
+        informacoes = cur.fetchall()
+        for i in informacoes:
+            listFilter.append(i)
+    return listFilter
+
+#VISUALIZAR carro
 def viewCarro(id):
     view = []
     with conexao:
@@ -21,21 +35,22 @@ def preViewCarros():
     preView = []
     with conexao:
         cur = conexao.cursor()
-        querry = "SELECT id, marca, modelo, anoFabricacao, cor, placa, preco FROM carros"
+        querry = "SELECT id, marca, modelo, anoFabricacao, cor, placa, kilometragem, status, preco FROM carros"
         cur.execute(querry)
         preVisualizar = cur.fetchall()
         for i in preVisualizar:
             preView.append(i)
     return preView
 
-#EDITAR carros
+#EDITAR carro
 def editCarro(i):
+    #i = ['preco','kilometragem','status','dataVenda',id]
     with conexao:
         cur = conexao.cursor()
         querry = "UPDATE carros SET preco=?, kilometragem=?, status=?, dataVenda=? WHERE id=?"
         cur.execute(querry, i)
 
-#DELETAR carros
+#DELETAR carro
 def deleteCarro(id):
     with conexao:
         cur = conexao.cursor()
@@ -44,7 +59,21 @@ def deleteCarro(id):
 
 #----------------------------------------Motos----------------------------------------#
 
-#VISUALIZAR motos
+#FILTRAR motos
+def filterMotos(marca, modelo, ano, placa):
+    listFilter = []
+    with conexao:
+        cur = conexao.cursor()
+        querry = '''SELECT id, marca, modelo, anoFabricacao, cor, placa, kilometragem, status, preco 
+                    FROM motos 
+                    WHERE (? is NULL or marca=? or modelo=? or anoFabricacao=? or placa=?)'''
+        cur.execute(querry, [marca, marca, modelo, ano, placa])
+        informacoes = cur.fetchall()
+        for i in informacoes:
+            listFilter.append(i)
+    return listFilter
+
+#VISUALIZAR moto
 def viewMoto(id):
     view = []
     with conexao:
@@ -61,21 +90,22 @@ def preViewMotos():
     preView = []
     with conexao:
         cur = conexao.cursor()
-        querry = "SELECT id, marca, modelo, anoFabricacao, cor, placa, preco FROM motos"
+        querry = "SELECT id, marca, modelo, anoFabricacao, cor, placa, kilometragem, status, preco FROM motos"
         cur.execute(querry)
         preVisualizar = cur.fetchall()
         for i in preVisualizar:
             preView.append(i)
     return preView
 
-#EDITAR motos
+#EDITAR moto
 def editMoto(i):
+    #i = ['preco','kilometragem','status','dataVenda',id]
     with conexao:
         cur = conexao.cursor()
         querry = "UPDATE motos SET preco=?, kilometragem=?, status=?, dataVenda=? WHERE id=?"
         cur.execute(querry, i)
 
-#DELETAR motos
+#DELETAR moto
 def deleteMoto(id):
     with conexao:
         cur = conexao.cursor()
